@@ -24,7 +24,7 @@ class Npc(
     override fun synthesize():String{
         return listOf("${synthesizePosition(this.mapReferences,this.coordinates)}\tscript\t${this.name ?: ""}\t${this.sprite ?: "-1"},{",
             super.synthesize(),
-                this.scopes.map{"${it.key}:\n${it.value.synthesize()}\n"}.joinToString(","),
+                this.scopes.map{"${it.key}:\n${it.value.synthesize()}\n"}.joinToString(""),
                 "}").joinToString(lineSeparator())
     }
 }
