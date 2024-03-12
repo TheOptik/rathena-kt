@@ -12,5 +12,9 @@ enum class FacingDirection(val value: Int) {
     EAST(6),
     SOUTH_WEST(3),
     SOUTH(4),
-    SOUTH_EAST(5),
+    SOUTH_EAST(5);
+
+    override fun toString(): String {
+        return value.toString()
+    }
 }

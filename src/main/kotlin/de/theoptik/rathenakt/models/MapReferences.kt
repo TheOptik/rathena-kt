@@ -1163,6 +1163,9 @@ enum class MapReferences(val mapName: String) {
     _1_at_vrpo("1@vrpo"),
     _1_at_pdb("1@pdb"),
     airplane2("airplane2"),
-    vr_bob("vr_bob"),
+    vr_bob("vr_bob");
 
+    override fun toString(): String {
+        return mapName
+    }
 }
