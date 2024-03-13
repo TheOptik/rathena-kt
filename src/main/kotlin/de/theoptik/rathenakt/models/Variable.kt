@@ -32,7 +32,9 @@ private data object IntVariablePostfix : Postfixable {
     }
 }
 
-sealed class Variable<T>(private val name: String, private val initialValue: T) : Synthesizable, Prefixable,
+sealed class Variable<T>(private val name: String, private val initialValue: T) :
+    Synthesizable,
+    Prefixable,
     Postfixable {
     protected open fun synthesizeVariableName(): String {
         return synthesizeVariablePrefix() + name + synthesizeVariablePostfix()
@@ -47,12 +49,17 @@ sealed class Variable<T>(private val name: String, private val initialValue: T) 
     }
 }
 
+class TemporaryCharacterStringVariable(name: String, initialValue: String) :
+    Variable<String>(name, initialValue),
+    Prefixable by TemporaryCharacterVariable,
+    Postfixable by StringVariablePostfix
 
-class TemporaryCharacterStringVariable(name: String, initialValue: String) : Variable<String>(name, initialValue),
-    Prefixable by TemporaryCharacterVariable, Postfixable by StringVariablePostfix
+class ScopeStringVariable(name: String, initialValue: String) :
+    Variable<String>(name, initialValue),
+    Prefixable by ScopeVariablePrefix,
+    Postfixable by StringVariablePostfix
 
-class ScopeStringVariable(name: String, initialValue: String) : Variable<String>(name, initialValue),
-    Prefixable by ScopeVariablePrefix, Postfixable by StringVariablePostfix
-
-class ScopeIntVariable(name: String, initialValue: Int) : Variable<Int>(name, initialValue),
-    Prefixable by ScopeVariablePrefix, Postfixable by IntVariablePostfix
+class ScopeIntVariable(name: String, initialValue: Int) :
+    Variable<Int>(name, initialValue),
+    Prefixable by ScopeVariablePrefix,
+    Postfixable by IntVariablePostfix
