@@ -3,9 +3,10 @@ package de.theoptik.rathenakt.models
 open class Scope(open val name: String?) : Synthesizable {
     private val parts: MutableList<ScopePart> = mutableListOf()
 
-    operator fun invoke(init: Scope.()->Unit){
+    operator fun invoke(init: Scope.() -> Unit) {
         this.init()
     }
+
     fun clearMessages() {
         parts.add(ScopePartClear)
     }
@@ -18,7 +19,7 @@ open class Scope(open val name: String?) : Synthesizable {
         parts.add(ScopePartGoto(scope))
     }
 
-    fun menu(init: Menu.()->Unit){
+    fun menu(init: Menu.() -> Unit) {
         val menu = Menu()
         menu.init()
         parts.add(ScopePartMenu(menu.options))
@@ -33,14 +34,14 @@ open class Scope(open val name: String?) : Synthesizable {
         return partsWithEnd.map { "\t${it.synthesize()};" + System.lineSeparator() }.joinToString("")
     }
 
-    fun variable(name: String, initialValue:String): Variable<String> {
-        val variable =ScopeStringVariable(name,initialValue)
+    fun variable(name: String, initialValue: String): Variable<String> {
+        val variable = ScopeStringVariable(name, initialValue)
         parts.add(ScopePartVaraibleInstantiation(variable))
         return variable
     }
 
-    fun variable(name: String, initialValue:Int): Variable<Int> {
-        val variable =ScopeIntVariable(name,initialValue)
+    fun variable(name: String, initialValue: Int): Variable<Int> {
+        val variable = ScopeIntVariable(name, initialValue)
         parts.add(ScopePartVaraibleInstantiation(variable))
         return variable
     }

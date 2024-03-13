@@ -1,36 +1,36 @@
 package de.theoptik.rathenakt.models
 
-interface Prefixable {
-    fun synthesizeVariablePrefix(): String {
-        return ""
-    }
+private interface Prefixable {
+    fun synthesizeVariablePrefix(): String
 }
 
-class TemporaryCharacterVariable : Prefixable {
+private data object TemporaryCharacterVariable : Prefixable {
     override fun synthesizeVariablePrefix(): String {
         return "@"
     }
 }
 
-class ScopeVariable: Prefixable {
+private data object ScopeVariablePrefix : Prefixable {
     override fun synthesizeVariablePrefix(): String {
         return ".@"
     }
 }
 
-interface Postfixable {
-    fun synthesizeVariablePostfix(): String {
-        return ""
-    }
+private interface Postfixable {
+    fun synthesizeVariablePostfix(): String
 }
 
-class StringVariable : Postfixable {
+private data object StringVariablePostfix : Postfixable {
     override fun synthesizeVariablePostfix(): String {
         return "$"
     }
 }
 
-class IntVariable : Postfixable
+private data object IntVariablePostfix : Postfixable {
+    override fun synthesizeVariablePostfix(): String {
+        return ""
+    }
+}
 
 sealed class Variable<T>(private val name: String, private val initialValue: T) : Synthesizable, Prefixable,
     Postfixable {
@@ -49,10 +49,10 @@ sealed class Variable<T>(private val name: String, private val initialValue: T) 
 
 
 class TemporaryCharacterStringVariable(name: String, initialValue: String) : Variable<String>(name, initialValue),
-    Prefixable by TemporaryCharacterVariable(), Postfixable by StringVariable()
+    Prefixable by TemporaryCharacterVariable, Postfixable by StringVariablePostfix
 
-class ScopeStringVariable(name:String, initialValue: String): Variable<String>(name,initialValue),
-        Prefixable by ScopeVariable(), Postfixable by StringVariable()
+class ScopeStringVariable(name: String, initialValue: String) : Variable<String>(name, initialValue),
+    Prefixable by ScopeVariablePrefix, Postfixable by StringVariablePostfix
 
-class ScopeIntVariable(name:String, initialValue: Int): Variable<Int>(name,initialValue),
-    Prefixable by ScopeVariable(), Postfixable by IntVariable()
+class ScopeIntVariable(name: String, initialValue: Int) : Variable<Int>(name, initialValue),
+    Prefixable by ScopeVariablePrefix, Postfixable by IntVariablePostfix
