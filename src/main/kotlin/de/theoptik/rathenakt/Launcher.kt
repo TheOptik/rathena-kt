@@ -35,13 +35,18 @@ fun main() {
                 option("screw you", null)
             }
         }
-    testNpc.synthesize("test.txt")
+    println(testNpc.synthesize())
 
+    // rathena-kt version of https://github.com/rathena/rathena/blob/master/npc/custom/healer.txt
     val healer =
         npc(name = "Healer") {
-            val price = variable("Price", 0)
-            val buffs = variable("Buffs", 0)
-            val delay = variable("Delay", 0)
+            val healDelay = characterVariable("HD")
+
+            val price = variable("Price", 0) // Zeny required for heal
+            val buffs = variable("Buffs", 0) // Also buff players? (1: yes / 0: no)
+            val delay = variable("Delay", 0) // Heal delay, in seconds
+
+            `if` {}
         }
 
     println(healer.synthesize())

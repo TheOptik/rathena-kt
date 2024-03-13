@@ -52,4 +52,30 @@ open class Scope(open val name: String?) : Synthesizable {
         parts.add(ScopePartVaraibleInstantiation(variable))
         return variable
     }
+
+    fun characterVariable(name: String): VariableStub<*, CharacterIntVariable, CharacterStringVariable> {
+        val variable = VariableStub(name,{value:Int ->CharacterIntVariable(name,value)},{value:String ->CharacterStringVariable(name,value)})
+        return variable
+    }
+
+    fun characterVariable(
+        name: String,
+        initialValue: String,
+    ): Variable<String> {
+        val variable = CharacterStringVariable(name, initialValue)
+        parts.add(ScopePartVaraibleInstantiation(variable))
+        return variable
+    }
+
+    fun characterVariable(
+        name: String,
+        initialValue: Int,
+    ): Variable<Int> {
+        val variable = CharacterIntVariable(name, initialValue)
+        parts.add(ScopePartVaraibleInstantiation(variable))
+        return variable
+    }
+
+    fun `if`(init: IfCondition.() -> Unit)  {
+    }
 }

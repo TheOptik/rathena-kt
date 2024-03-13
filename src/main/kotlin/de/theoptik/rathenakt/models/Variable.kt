@@ -1,18 +1,24 @@
 package de.theoptik.rathenakt.models
 
-private interface Prefixable {
+interface Prefixable {
     fun synthesizeVariablePrefix(): String
 }
 
-private data object TemporaryCharacterVariable : Prefixable {
+data object TemporaryCharacterVariable : Prefixable {
     override fun synthesizeVariablePrefix(): String {
         return "@"
     }
 }
 
-private data object ScopeVariablePrefix : Prefixable {
+data object ScopeVariablePrefix : Prefixable {
     override fun synthesizeVariablePrefix(): String {
         return ".@"
+    }
+}
+
+data object CharacterVariablePrefix : Prefixable {
+    override fun synthesizeVariablePrefix(): String {
+        return "@"
     }
 }
 
@@ -49,6 +55,13 @@ sealed class Variable<T>(private val name: String, private val initialValue: T) 
     }
 }
 
+@Suppress("BOUNDS_NOT_ALLOWED_IF_BOUNDED_BY_TYPE_PARAMETER")
+class VariableStub<T : Prefixable, VI, VS>(
+    name:String,
+    instanciateIntVariable: (value: Int) -> VI,
+    instanciateStringVariable: (value: String) -> VS,
+) where VI : T, VI : Variable<Int>, VS : T, VS : Variable<String>
+
 class TemporaryCharacterStringVariable(name: String, initialValue: String) :
     Variable<String>(name, initialValue),
     Prefixable by TemporaryCharacterVariable,
@@ -62,4 +75,14 @@ class ScopeStringVariable(name: String, initialValue: String) :
 class ScopeIntVariable(name: String, initialValue: Int) :
     Variable<Int>(name, initialValue),
     Prefixable by ScopeVariablePrefix,
+    Postfixable by IntVariablePostfix
+
+class CharacterStringVariable(name: String, initialValue: String) :
+    Variable<String>(name, initialValue),
+    Prefixable by CharacterVariablePrefix,
+    Postfixable by StringVariablePostfix
+
+class CharacterIntVariable(name: String, initialValue: Int) :
+    Variable<Int>(name, initialValue),
+    Prefixable by CharacterVariablePrefix,
     Postfixable by IntVariablePostfix
