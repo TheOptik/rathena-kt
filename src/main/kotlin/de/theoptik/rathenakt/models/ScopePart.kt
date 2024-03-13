@@ -35,3 +35,9 @@ data object ScopePartClear : ScopePart() {
         return "clear";
     }
 }
+
+data class ScopePartVaraibleInstantiation<T>(private val variable:Variable<T>):ScopePart(){
+    override fun synthesize(): String {
+        return variable.synthesize();
+    }
+}

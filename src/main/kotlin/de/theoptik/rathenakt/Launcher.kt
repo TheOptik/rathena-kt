@@ -6,7 +6,7 @@ import de.theoptik.rathenakt.models.MapReferences
 import de.theoptik.rathenakt.models.npc
 
 fun main() {
-    val npc = npc(
+    val testNpc = npc(
         name = "Test",
         sprite = 589,
         mapReferences = MapReferences.prontera,
@@ -33,5 +33,16 @@ fun main() {
             option("screw you", null)
         }
     }
-    println(npc.synthesize())
+    testNpc.synthesize("test.txt")
+
+
+
+    val healer = npc(name="Healer"){
+        val price = variable("Price", 0)
+        val buffs = variable("Buffs", 0)
+        val delay = variable("Delay", 0)
+    }
+
+    println(healer.synthesize())
+
 }
