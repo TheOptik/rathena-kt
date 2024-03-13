@@ -1,9 +1,8 @@
 package de.theoptik.rathenakt
 
-import de.theoptik.rathenakt.models.Coordinates
-import de.theoptik.rathenakt.models.FacingDirection
-import de.theoptik.rathenakt.models.MapReferences
-import de.theoptik.rathenakt.models.npc
+import de.theoptik.rathenakt.models.*
+import de.theoptik.rathenakt.models.TickType.EPOCH_TIME
+
 
 fun main() {
     val testNpc =
@@ -18,16 +17,16 @@ fun main() {
             val goodbye =
                 scope("L_Goodbye") {
                     clearMessages()
-                    addMessage("Have a nice day!")
+                    message("Have a nice day!")
                 }
 
             hello {
                 clearMessages()
-                addMessage("Hello traveler")
+                message("Hello traveler")
                 goto(goodbye)
             }
 
-            addMessage("What would you like to say to me?")
+            message("What would you like to say to me?")
 
             menu {
                 option("hello", hello)
@@ -40,14 +39,42 @@ fun main() {
     // rathena-kt version of https://github.com/rathena/rathena/blob/master/npc/custom/healer.txt
     val healer =
         npc(name = "Healer") {
-            val healDelay = characterVariable("HD")
+            val healDelay = characterVariable("HD", Int)
 
             val price = variable("Price", 0) // Zeny required for heal
             val buffs = variable("Buffs", 0) // Also buff players? (1: yes / 0: no)
             val delay = variable("Delay", 0) // Heal delay, in seconds
 
-            `if` {}
+            `if`(healDelay gt gettimetick(EPOCH_TIME)) {
+                end()
+            }
+            `if`(price) {
+                chatMessage(
+                    strcharinfo(CharInfoType.CHARACTER_NAME),
+                    "Healing costs " concat callfunc("F_InsertComma", price) concat " Zeny."
+                )
+            }
+            `if`(Zeny lt price) {
+                end()
+            }
+//            `if`(select("^0055FFHeal^000000:^777777Cancel^000000") == 2)
+//                end()
+//            Zeny -= price;
+//        }
+//            specialeffect2 EF_HEAL2;
+//            percentheal 100,100;
+//            if (buffs) {
+//            specialeffect2 EF_INCAGILITY;
+//            sc_start SC_INCREASEAGI,240000,10;
+//            specialeffect2 EF_BLESSING;
+//            sc_start SC_BLESSING,240000,10;
+//        }
+//            if (delay)
+//            healDelay = gettimetick(2) + delay;
+//            end;
         }
 
     println(healer.synthesize())
 }
+
+

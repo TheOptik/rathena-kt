@@ -22,6 +22,12 @@ data object CharacterVariablePrefix : Prefixable {
     }
 }
 
+data object PermanentCharacterVariablePrefix : Prefixable {
+    override fun synthesizeVariablePrefix(): String {
+        return ""
+    }
+}
+
 private interface Postfixable {
     fun synthesizeVariablePostfix(): String
 }
@@ -38,51 +44,57 @@ private data object IntVariablePostfix : Postfixable {
     }
 }
 
-sealed class Variable<T>(private val name: String, private val initialValue: T) :
+sealed class Variable<T>(private val name: String) :
     Synthesizable,
     Prefixable,
     Postfixable {
-    protected open fun synthesizeVariableName(): String {
+    override fun synthesize(): String {
         return synthesizeVariablePrefix() + name + synthesizeVariablePostfix()
     }
 
-    protected open fun synthesizeDeclaration(): String {
-        return " = $initialValue"
+    infix fun gt(other: Statement):Statement {
+        return GreaterThanStatement(VariableStatement(this), other)
     }
 
-    override fun synthesize(): String {
-        return synthesizeVariableName() + synthesizeDeclaration()
+    infix fun gt(other: Variable<*>):Statement {
+        return GreaterThanStatement(VariableStatement(this), VariableStatement(other))
+    }
+
+    infix fun lt(other: Variable<*>): Statement {
+        return GreaterThanStatement(VariableStatement(this), VariableStatement(other))
+    }
+
+    infix fun lt(other: Statement): Statement {
+        return GreaterThanStatement(VariableStatement(this), other)
     }
 }
 
-@Suppress("BOUNDS_NOT_ALLOWED_IF_BOUNDED_BY_TYPE_PARAMETER")
-class VariableStub<T : Prefixable, VI, VS>(
-    name:String,
-    instanciateIntVariable: (value: Int) -> VI,
-    instanciateStringVariable: (value: String) -> VS,
-) where VI : T, VI : Variable<Int>, VS : T, VS : Variable<String>
-
-class TemporaryCharacterStringVariable(name: String, initialValue: String) :
-    Variable<String>(name, initialValue),
+class TemporaryCharacterStringVariable(name: String) :
+    Variable<String>(name),
     Prefixable by TemporaryCharacterVariable,
     Postfixable by StringVariablePostfix
 
-class ScopeStringVariable(name: String, initialValue: String) :
-    Variable<String>(name, initialValue),
+class ScopeStringVariable(name: String) :
+    Variable<String>(name),
     Prefixable by ScopeVariablePrefix,
     Postfixable by StringVariablePostfix
 
-class ScopeIntVariable(name: String, initialValue: Int) :
-    Variable<Int>(name, initialValue),
+class ScopeIntVariable(name: String) :
+    Variable<Int>(name),
     Prefixable by ScopeVariablePrefix,
     Postfixable by IntVariablePostfix
 
-class CharacterStringVariable(name: String, initialValue: String) :
-    Variable<String>(name, initialValue),
+class CharacterStringVariable(name: String) :
+    Variable<String>(name),
     Prefixable by CharacterVariablePrefix,
     Postfixable by StringVariablePostfix
 
-class CharacterIntVariable(name: String, initialValue: Int) :
-    Variable<Int>(name, initialValue),
+open class CharacterIntVariable(name: String) :
+    Variable<Int>(name),
     Prefixable by CharacterVariablePrefix,
+    Postfixable by IntVariablePostfix
+
+open class PermanentCharacterIntVariable(name: String) :
+    Variable<Int>(name),
+    Prefixable by PermanentCharacterVariablePrefix,
     Postfixable by IntVariablePostfix
