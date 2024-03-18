@@ -98,3 +98,8 @@ open class PermanentCharacterIntVariable(name: String) :
     Variable<Int>(name),
     Prefixable by PermanentCharacterVariablePrefix,
     Postfixable by IntVariablePostfix
+
+open class PermanentCharacterStringVariable(name: String) :
+    Variable<Int>(name),
+    Prefixable by PermanentCharacterVariablePrefix,
+    Postfixable by StringVariablePostfix
