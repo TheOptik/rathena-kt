@@ -1,73 +1,35 @@
 package de.theoptik.rathenakt.models
 
+import de.theoptik.rathenakt.Synthesizer
+
 sealed class ScopePart : Synthesizable{
     open fun isTerminating():Boolean{return false}
-}
-
-data object ScopePartClose : ScopePart() {
-    override fun synthesize(): String {
-        return "close;"
+    override fun synthesize(synthesizer: Synthesizer):String {
+        return synthesizer.synthesize(this)
     }
 }
+data object ScopePartClose : ScopePart()
 
-data class ScopePartMessage(private val message: String) : ScopePart() {
-    override fun synthesize(): String {
-        return "mes \"${this.message}\";"
-    }
-}
+data class ScopePartMessage(val message: String) : ScopePart()
 
-data class ScopePartChatMessage(private val playerName:String, private val message: String) : ScopePart() {
-    override fun synthesize(): String {
-        return "message $playerName, $message;"
-    }
-}
+data class ScopePartChatMessage(val playerName:Statement,  val message: Statement) : ScopePart()
 
-data class ScopePartGoto(private val scope: Scope) : ScopePart() {
+data class ScopePartSelect(val options:List<String>) : ScopePart()
+
+data class ScopePartGoto(val scope: Scope) : ScopePart() {
     override fun isTerminating(): Boolean {
-        return true;
-    }
-    override fun synthesize(): String {
-        return "goto ${this.scope.name ?: "-"};"
+        return true
     }
 }
 
-data class ScopePartMenu(private val options: Map<String, Scope?>) : ScopePart() {
-    override fun synthesize(): String {
-        return "menu ${
-            options
-                .map { "\"${it.key}\",${it.value?.name ?: "-"}" }
-                .joinToString(",")
-        };"
-    }
-}
+data class ScopePartMenu(val options: Map<String, Scope?>) : ScopePart()
 
-data object ScopePartEnd : ScopePart() {
-    override fun synthesize(): String {
-        return "end;"
-    }
-}
+data object ScopePartEnd : ScopePart()
 
-data object ScopePartClear : ScopePart() {
-    override fun synthesize(): String {
-        return "clear;"
-    }
-}
+data object ScopePartClear : ScopePart()
 
-data class ScopePartVariableInstantiation<T>(private val variable: Variable<T>, private val initialValue: T) : ScopePart() {
-    override fun synthesize(): String {
-        return "${variable.synthesize()} = $initialValue;"
-    }
-}
+data class ScopePartVariableInstantiation<T>(val variable: Variable<T>, val initialValue: T) : ScopePart()
 
-data class ScopePartStatement(private val statement: Statement):ScopePart(){
-    override fun synthesize(): String {
-        return statement.synthesize()
-    }
+data class ScopePartStatement(val statement: Statement):ScopePart()
 
-}
-
-data class ScopePartIf(private val condition: IfCondition) : ScopePart() {
-    override fun synthesize(): String {
-        return condition.synthesize()
-    }
-}
+data class ScopePartIf(val condition: IfCondition) : ScopePart()

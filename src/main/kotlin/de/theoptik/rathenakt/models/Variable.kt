@@ -1,62 +1,17 @@
 package de.theoptik.rathenakt.models
 
-interface Prefixable {
-    fun synthesizeVariablePrefix(): String
-}
+import de.theoptik.rathenakt.Synthesizer
 
-data object TemporaryCharacterVariable : Prefixable {
-    override fun synthesizeVariablePrefix(): String {
-        return "@"
-    }
-}
-
-data object ScopeVariablePrefix : Prefixable {
-    override fun synthesizeVariablePrefix(): String {
-        return ".@"
-    }
-}
-
-data object CharacterVariablePrefix : Prefixable {
-    override fun synthesizeVariablePrefix(): String {
-        return "@"
-    }
-}
-
-data object PermanentCharacterVariablePrefix : Prefixable {
-    override fun synthesizeVariablePrefix(): String {
-        return ""
-    }
-}
-
-private interface Postfixable {
-    fun synthesizeVariablePostfix(): String
-}
-
-private data object StringVariablePostfix : Postfixable {
-    override fun synthesizeVariablePostfix(): String {
-        return "$"
-    }
-}
-
-private data object IntVariablePostfix : Postfixable {
-    override fun synthesizeVariablePostfix(): String {
-        return ""
-    }
-}
-
-sealed class Variable<T>(private val name: String) :
-    Synthesizable,
-    Prefixable,
-    Postfixable {
-    override fun synthesize(): String {
-        return synthesizeVariablePrefix() + name + synthesizeVariablePostfix()
+sealed class Variable<T>(val name: String) : Synthesizable {
+    override fun synthesize(synthesizer: Synthesizer):String {
+        return synthesizer.synthesize(this)
     }
 
-    infix fun gt(other: Statement):Statement {
+    infix fun gt(other: Statement): Statement {
         return GreaterThanStatement(VariableStatement(this), other)
     }
 
-    infix fun gt(other: Variable<*>):Statement {
+    infix fun gt(other: Variable<*>): Statement {
         return GreaterThanStatement(VariableStatement(this), VariableStatement(other))
     }
 
@@ -69,37 +24,20 @@ sealed class Variable<T>(private val name: String) :
     }
 }
 
-class TemporaryCharacterStringVariable(name: String) :
-    Variable<String>(name),
-    Prefixable by TemporaryCharacterVariable,
-    Postfixable by StringVariablePostfix
-
 class ScopeStringVariable(name: String) :
-    Variable<String>(name),
-    Prefixable by ScopeVariablePrefix,
-    Postfixable by StringVariablePostfix
+    Variable<String>(name)
 
 class ScopeIntVariable(name: String) :
-    Variable<Int>(name),
-    Prefixable by ScopeVariablePrefix,
-    Postfixable by IntVariablePostfix
+    Variable<Int>(name)
 
 class CharacterStringVariable(name: String) :
-    Variable<String>(name),
-    Prefixable by CharacterVariablePrefix,
-    Postfixable by StringVariablePostfix
+    Variable<String>(name)
 
-open class CharacterIntVariable(name: String) :
-    Variable<Int>(name),
-    Prefixable by CharacterVariablePrefix,
-    Postfixable by IntVariablePostfix
+class CharacterIntVariable(name: String) :
+    Variable<Int>(name)
 
 open class PermanentCharacterIntVariable(name: String) :
-    Variable<Int>(name),
-    Prefixable by PermanentCharacterVariablePrefix,
-    Postfixable by IntVariablePostfix
+    Variable<Int>(name)
 
-open class PermanentCharacterStringVariable(name: String) :
-    Variable<Int>(name),
-    Prefixable by PermanentCharacterVariablePrefix,
-    Postfixable by StringVariablePostfix
+class PermanentCharacterStringVariable(name: String) :
+    Variable<Int>(name)

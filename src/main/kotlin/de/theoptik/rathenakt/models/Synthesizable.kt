@@ -1,12 +1,8 @@
 package de.theoptik.rathenakt.models
 
-import java.io.File
+import de.theoptik.rathenakt.Synthesizer
 
 interface Synthesizable {
-    //TODO: migrate to visitor pattern
-    fun synthesize(): String
+    fun synthesize(synthesizer: Synthesizer): String
 
-    fun synthesize(fileName: String) {
-        File(fileName).writeText(synthesize())
-    }
 }

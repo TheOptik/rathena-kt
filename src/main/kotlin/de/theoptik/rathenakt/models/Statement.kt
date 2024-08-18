@@ -1,16 +1,20 @@
 package de.theoptik.rathenakt.models
 
-sealed class Statement(private val value:String): Synthesizable {
-    override fun synthesize(): String {
-        return value
+import de.theoptik.rathenakt.Synthesizer
+
+sealed class Statement: Synthesizable{
+    override fun synthesize(synthesizer: Synthesizer):String {
+        return synthesizer.synthesize(this)
     }
 }
 
-data class VariableStatement(private val variable: Variable<*>): Statement(variable.synthesize())
-data class GreaterThanStatement(private val left: Statement, private val right: Statement): Statement("${left.synthesize()} > ${right.synthesize()}")
-private data  class TimeTickStatement(private val type:TickType):Statement("gettimetick(${type.value})")
-private data class CharInfoStatement(private val type:CharInfoType):Statement("strcharinfo(${type.value})")
-private data class CallFuncStatement(private val functionName:String, private val argument: Statement):Statement("callfunc(\"$functionName\", ${argument.synthesize()})")
+data class ConcatinazedStatement(val first:Statement, val second:Statement):Statement()
+data class StringStatement(val value: String):Statement()
+data class VariableStatement(val variable: Variable<*>): Statement()
+data class GreaterThanStatement(val left: Statement, val right: Statement): Statement()
+data  class TimeTickStatement( val type:TickType):Statement()
+data class CharInfoStatement(val type:CharInfoType):Statement()
+data class CallFuncStatement( val functionName:String, val argument: Statement):Statement()
 
 fun gettimetick(type:TickType): Statement {
     return TimeTickStatement(type)

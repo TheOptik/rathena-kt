@@ -1,9 +1,9 @@
 package de.theoptik.rathenakt.models
 
-import java.lang.System.lineSeparator
+import de.theoptik.rathenakt.Synthesizer
 
-open class Scope(open val name: String? = null) : Synthesizable {
-    protected val parts: MutableList<ScopePart> = mutableListOf()
+sealed class Scope(open val name: String? = null) : Synthesizable {
+    val parts: MutableList<ScopePart> = mutableListOf()
 
     operator fun invoke(init: Scope.() -> Unit) {
         this.init()
@@ -17,12 +17,20 @@ open class Scope(open val name: String? = null) : Synthesizable {
         parts.add(ScopePartMessage(message))
     }
 
-    fun chatMessage(playerName:String, message: String) {
+    fun chatMessage(playerName: String, message: String) {
+        chatMessage(StringStatement(playerName), message)
+    }
+
+    fun chatMessage(playerName: Statement, message: String) {
+        chatMessage(playerName, StringStatement(message))
+    }
+
+    fun chatMessage(playerName: Statement, message: Statement) {
         parts.add(ScopePartChatMessage(playerName, message))
     }
 
-    fun chatMessage(playerName:Statement, message: String) {
-        parts.add(ScopePartChatMessage(playerName.synthesize(), message))
+    fun select(options:String) {
+        parts.add(ScopePartSelect(options.split(":")))
     }
 
     fun goto(scope: Scope) {
@@ -39,14 +47,8 @@ open class Scope(open val name: String? = null) : Synthesizable {
         parts.add(ScopePartEnd)
     }
 
-    override fun synthesize(): String {
-        val partsWithEnd =
-            if (parts.lastOrNull()?.isTerminating() == true) {
-                parts + ScopePartClose
-            } else {
-                parts
-            }
-        return partsWithEnd.map { "\t${it.synthesize()}" }.joinToString(lineSeparator())
+    override fun synthesize(synthesizer: Synthesizer): String {
+        return synthesizer.synthesize(this)
     }
 
     fun variable(
@@ -67,11 +69,11 @@ open class Scope(open val name: String? = null) : Synthesizable {
         return variable
     }
 
-    fun characterVariable(name: String, _typeHint: Int.Companion):Variable<Int> {
+    fun characterVariable(name: String, _typeHint: Int.Companion): Variable<Int> {
         return CharacterIntVariable(name)
     }
 
-    fun characterVariable(name: String, _typeHint: String.Companion):Variable<String> {
+    fun characterVariable(name: String, _typeHint: String.Companion): Variable<String> {
         return CharacterStringVariable(name)
     }
 
@@ -93,13 +95,51 @@ open class Scope(open val name: String? = null) : Synthesizable {
         return variable
     }
 
-    fun `if`(statement:Statement, init: IfCondition.() -> Unit)  {
+    fun `if`(statement: Statement, init: IfCondition.() -> Unit) {
         val ifScope = IfCondition(statement)
         ifScope.init()
         parts.add(ScopePartIf(ifScope))
     }
 
-    fun `if`(variable:Variable<*>, init: IfCondition.() -> Unit)  {
-        this.`if`(VariableStatement(variable),init)
+    fun `if`(variable: Variable<*>, init: IfCondition.() -> Unit) {
+        this.`if`(VariableStatement(variable), init)
+    }
+}
+
+class SimpleScope(name: String?) : Scope(name)
+
+class Npc(
+    name: String?,
+    val sprite: Int?,
+    val mapReferences: MapReferences?,
+    val coordinates: Coordinates?,
+) : Scope(name) {
+    val scopes: MutableMap<String, Scope> = mutableMapOf()
+
+    fun scope(
+        scopeName: String,
+        init: Scope.() -> Unit,
+    ): Scope {
+        val scope = SimpleScope(scopeName)
+        scope.init()
+        scopes[scopeName] = scope
+        return scope
+    }
+
+    fun scope(scopeName: String): Scope {
+        val scope = SimpleScope(scopeName)
+        scopes[scopeName] = scope
+        return scope
+    }
+
+    override fun synthesize(synthesizer: Synthesizer):String {
+        return synthesizer.synthesize(this)
+    }
+}
+
+class IfCondition(val statement: Statement) : Scope() {
+
+    override fun synthesize(synthesizer: Synthesizer): String {
+        return synthesizer.synthesize(this)
     }
 }

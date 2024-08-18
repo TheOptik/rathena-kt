@@ -34,7 +34,8 @@ fun main() {
                 option("screw you", null)
             }
         }
-    println(testNpc.synthesize())
+    val synthesizer = Synthesizer()
+    println(testNpc.synthesize(synthesizer))
 
     // rathena-kt version of https://github.com/rathena/rathena/blob/master/npc/custom/healer.txt
     val healer =
@@ -57,10 +58,10 @@ fun main() {
             `if`(Zeny lt price) {
                 end()
             }
-//            `if`(select("^0055FFHeal^000000:^777777Cancel^000000") == 2)
+//            `if`(select("^0055FFHeal^000000:^777777Cancel^000000") == 2) {
 //                end()
-//            Zeny -= price;
-//        }
+//                Zeny -= price;
+//            }
 //            specialeffect2 EF_HEAL2;
 //            percentheal 100,100;
 //            if (buffs) {
@@ -74,7 +75,8 @@ fun main() {
 //            end;
         }
 
-    println(healer.synthesize())
+    val synthesizer2 = Synthesizer()
+    println(healer.synthesize(synthesizer2))
 }
 
 

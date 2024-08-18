@@ -16,14 +16,10 @@ enum class CharInfoType(val value: Int) {
 data object Zeny: PermanentCharacterIntVariable("Zeny")
 
 
-infix fun String.concat(statement: Statement): String {
-    return "\"$this\" + ${statement.synthesize()}"
+infix fun String.concat(statement: Statement): Statement {
+    return ConcatinazedStatement(StringStatement(this), statement)
 }
 
-infix fun String.concat(string: String): String {
-    return "$this + \"$string\""
-}
-
-infix fun Statement.concat(string: String): String {
-    return "${this.synthesize()} + \"$string\""
+infix fun Statement.concat(string: String): Statement {
+    return ConcatinazedStatement(this,StringStatement(string))
 }
