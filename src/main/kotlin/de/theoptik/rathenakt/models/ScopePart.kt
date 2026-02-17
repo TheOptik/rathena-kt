@@ -51,3 +51,14 @@ data class ScopePartStatement(
 data class ScopePartIf(
     val condition: IfCondition,
 ) : ScopePart()
+
+data class ScopePartAssignment(
+    val variable: Variable<*>,
+    val value: Statement,
+) : ScopePart()
+
+data class ScopePartCompoundAssignment(
+    val variable: Variable<*>,
+    val operator: String,
+    val value: Statement,
+) : ScopePart()

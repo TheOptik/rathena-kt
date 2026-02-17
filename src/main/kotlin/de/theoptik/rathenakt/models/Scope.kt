@@ -121,6 +121,62 @@ sealed class Scope(
     ) {
         this.`if`(VariableStatement(variable), init)
     }
+
+    fun assign(
+        variable: Variable<*>,
+        value: Statement,
+    ) {
+        parts.add(ScopePartAssignment(variable, value))
+    }
+
+    fun assign(
+        variable: Variable<*>,
+        value: Int,
+    ) {
+        parts.add(ScopePartAssignment(variable, IntLiteralStatement(value)))
+    }
+
+    fun assign(
+        variable: Variable<*>,
+        value: Variable<*>,
+    ) {
+        parts.add(ScopePartAssignment(variable, VariableStatement(value)))
+    }
+
+    fun plusAssign(
+        variable: Variable<*>,
+        value: Statement,
+    ) {
+        parts.add(ScopePartCompoundAssignment(variable, "+=", value))
+    }
+
+    fun plusAssign(
+        variable: Variable<*>,
+        value: Int,
+    ) {
+        parts.add(ScopePartCompoundAssignment(variable, "+=", IntLiteralStatement(value)))
+    }
+
+    fun minusAssign(
+        variable: Variable<*>,
+        value: Statement,
+    ) {
+        parts.add(ScopePartCompoundAssignment(variable, "-=", value))
+    }
+
+    fun minusAssign(
+        variable: Variable<*>,
+        value: Int,
+    ) {
+        parts.add(ScopePartCompoundAssignment(variable, "-=", IntLiteralStatement(value)))
+    }
+
+    fun minusAssign(
+        variable: Variable<*>,
+        value: Variable<*>,
+    ) {
+        parts.add(ScopePartCompoundAssignment(variable, "-=", VariableStatement(value)))
+    }
 }
 
 class SimpleScope(
