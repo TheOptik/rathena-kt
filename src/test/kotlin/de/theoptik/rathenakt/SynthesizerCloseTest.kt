@@ -1,9 +1,9 @@
 package de.theoptik.rathenakt
 
 import de.theoptik.rathenakt.models.*
-import kotlin.test.Test
 import kotlin.test.assertContains
-import kotlin.test.assertFalse
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Test
 
 class SynthesizerCloseTest {
 

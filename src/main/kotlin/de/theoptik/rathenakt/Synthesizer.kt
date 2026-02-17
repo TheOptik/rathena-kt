@@ -61,15 +61,11 @@ class Synthesizer {
         }
     }
 
-    private fun serialize(scope: Scope): String {
-        val partsWithEnd =
-            if (scope.parts.lastOrNull()?.isTerminating() == true) {
-                scope.parts + ScopePartClose
-            } else {
-                scope.parts
-            }
-        return partsWithEnd.map { "\t${it.synthesize(this)}" }.joinToString(lineSeparator())
-    }
+    private fun serialize(scope: Scope): String = if (scope.parts.isEmpty() || scope.parts.last().isTerminating()) {
+        scope.parts
+    } else {
+        scope.parts + ScopePartClose
+    }.joinToString(lineSeparator()) { "\t${it.synthesize(this)}" }
 
     fun synthesize(variable: Variable<*>): String {
         return when (variable) {
