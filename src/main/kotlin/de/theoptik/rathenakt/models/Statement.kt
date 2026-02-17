@@ -12,6 +12,7 @@ data class ConcatenatedStatement(val first:Statement, val second:Statement):Stat
 data class StringStatement(val value: String):Statement()
 data class VariableStatement(val variable: Variable<*>): Statement()
 data class GreaterThanStatement(val left: Statement, val right: Statement): Statement()
+data class LesserThanStatement(val left: Statement, val right: Statement): Statement()
 data  class TimeTickStatement( val type:TickType):Statement()
 data class CharInfoStatement(val type:CharInfoType):Statement()
 data class CallFuncStatement( val functionName:String, val argument: Statement):Statement()

@@ -16,11 +16,11 @@ sealed class Variable<T>(val name: String) : Synthesizable {
     }
 
     infix fun lt(other: Variable<*>): Statement {
-        return GreaterThanStatement(VariableStatement(this), VariableStatement(other))
+        return LesserThanStatement(VariableStatement(this), VariableStatement(other))
     }
 
     infix fun lt(other: Statement): Statement {
-        return GreaterThanStatement(VariableStatement(this), other)
+        return LesserThanStatement(VariableStatement(this), other)
     }
 }
 
