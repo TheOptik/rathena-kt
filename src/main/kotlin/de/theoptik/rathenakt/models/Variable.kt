@@ -40,4 +40,4 @@ open class PermanentCharacterIntVariable(name: String) :
     Variable<Int>(name)
 
 class PermanentCharacterStringVariable(name: String) :
-    Variable<Int>(name)
+    Variable<String>(name)
