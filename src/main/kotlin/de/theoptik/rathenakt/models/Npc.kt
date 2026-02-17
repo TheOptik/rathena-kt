@@ -1,9 +1,5 @@
 package de.theoptik.rathenakt.models
 
-import java.lang.System.lineSeparator
-
-
-
 fun npc(
     name: String,
     sprite: Int = -1,
@@ -15,5 +11,3 @@ fun npc(
     npc.init()
     return npc
 }
-
-

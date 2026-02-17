@@ -1,6 +1,8 @@
 package de.theoptik.rathenakt.models
 
-enum class MapReferences(val mapName: String) {
+enum class MapReferences(
+    val mapName: String,
+) {
     ALB_SHIP("alb_ship"),
     ALB2TREA("alb2trea"),
     ALBERTA("alberta"),
@@ -1166,7 +1168,5 @@ enum class MapReferences(val mapName: String) {
     VR_BOB("vr_bob"),
     ;
 
-    override fun toString(): String {
-        return mapName
-    }
+    override fun toString(): String = mapName
 }

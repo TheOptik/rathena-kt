@@ -1,8 +1,16 @@
 package de.theoptik.rathenakt
 
-import de.theoptik.rathenakt.models.*
+import de.theoptik.rathenakt.models.CharInfoType
+import de.theoptik.rathenakt.models.Coordinates
+import de.theoptik.rathenakt.models.FacingDirection
+import de.theoptik.rathenakt.models.MapReferences
 import de.theoptik.rathenakt.models.TickType.EPOCH_TIME
-
+import de.theoptik.rathenakt.models.Zeny
+import de.theoptik.rathenakt.models.callfunc
+import de.theoptik.rathenakt.models.concat
+import de.theoptik.rathenakt.models.gettimetick
+import de.theoptik.rathenakt.models.npc
+import de.theoptik.rathenakt.models.strcharinfo
 
 fun main() {
     val testNpc =
@@ -52,7 +60,7 @@ fun main() {
             `if`(price) {
                 chatMessage(
                     strcharinfo(CharInfoType.CHARACTER_NAME),
-                    "Healing costs " concat callfunc("F_InsertComma", price) concat " Zeny."
+                    "Healing costs " concat callfunc("F_InsertComma", price) concat " Zeny.",
                 )
             }
             `if`(Zeny lt price) {
@@ -78,5 +86,3 @@ fun main() {
     val synthesizer2 = Synthesizer()
     println(healer.synthesize(synthesizer2))
 }
-
-
