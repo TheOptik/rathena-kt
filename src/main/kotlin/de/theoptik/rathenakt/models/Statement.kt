@@ -29,6 +29,55 @@ data class LesserThanStatement(
     val right: Statement,
 ) : Statement()
 
+data class GreaterThanOrEqualStatement(
+    val left: Statement,
+    val right: Statement,
+) : Statement()
+
+data class LesserThanOrEqualStatement(
+    val left: Statement,
+    val right: Statement,
+) : Statement()
+
+data class EqualStatement(
+    val left: Statement,
+    val right: Statement,
+) : Statement()
+
+data class NotEqualStatement(
+    val left: Statement,
+    val right: Statement,
+) : Statement()
+
+data class AddStatement(
+    val left: Statement,
+    val right: Statement,
+) : Statement()
+
+data class SubtractStatement(
+    val left: Statement,
+    val right: Statement,
+) : Statement()
+
+data class MultiplyStatement(
+    val left: Statement,
+    val right: Statement,
+) : Statement()
+
+data class DivideStatement(
+    val left: Statement,
+    val right: Statement,
+) : Statement()
+
+data class ModuloStatement(
+    val left: Statement,
+    val right: Statement,
+) : Statement()
+
+data class IntLiteralStatement(
+    val value: Int,
+) : Statement()
+
 data class TimeTickStatement(
     val type: TickType,
 ) : Statement()

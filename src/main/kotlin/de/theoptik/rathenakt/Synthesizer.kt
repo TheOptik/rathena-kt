@@ -8,7 +8,16 @@ import de.theoptik.rathenakt.models.ConcatenatedStatement
 import de.theoptik.rathenakt.models.Coordinates
 import de.theoptik.rathenakt.models.GreaterThanStatement
 import de.theoptik.rathenakt.models.IfCondition
+import de.theoptik.rathenakt.models.AddStatement
+import de.theoptik.rathenakt.models.DivideStatement
+import de.theoptik.rathenakt.models.EqualStatement
+import de.theoptik.rathenakt.models.GreaterThanOrEqualStatement
+import de.theoptik.rathenakt.models.IntLiteralStatement
+import de.theoptik.rathenakt.models.LesserThanOrEqualStatement
 import de.theoptik.rathenakt.models.LesserThanStatement
+import de.theoptik.rathenakt.models.ModuloStatement
+import de.theoptik.rathenakt.models.MultiplyStatement
+import de.theoptik.rathenakt.models.NotEqualStatement
 import de.theoptik.rathenakt.models.MapReferences
 import de.theoptik.rathenakt.models.Npc
 import de.theoptik.rathenakt.models.PermanentCharacterIntVariable
@@ -24,8 +33,11 @@ import de.theoptik.rathenakt.models.ScopePartGoto
 import de.theoptik.rathenakt.models.ScopePartIf
 import de.theoptik.rathenakt.models.ScopePartMenu
 import de.theoptik.rathenakt.models.ScopePartMessage
+import de.theoptik.rathenakt.models.ScopePartAssignment
+import de.theoptik.rathenakt.models.ScopePartCompoundAssignment
 import de.theoptik.rathenakt.models.ScopePartSelect
 import de.theoptik.rathenakt.models.ScopePartStatement
+import de.theoptik.rathenakt.models.SubtractStatement
 import de.theoptik.rathenakt.models.ScopePartVariableInstantiation
 import de.theoptik.rathenakt.models.ScopeStringVariable
 import de.theoptik.rathenakt.models.Statement
@@ -85,6 +97,14 @@ class Synthesizer {
             is ScopePartSelect -> {
                 part.options.joinToString(":")
             }
+
+            is ScopePartAssignment -> {
+                "${part.variable.synthesize(this)} = ${part.value.synthesize(this)};"
+            }
+
+            is ScopePartCompoundAssignment -> {
+                "${part.variable.synthesize(this)} ${part.operator} ${part.value.synthesize(this)};"
+            }
         }
 
     fun synthesize(statement: Statement): String =
@@ -97,6 +117,16 @@ class Synthesizer {
             is VariableStatement -> statement.variable.synthesize(this)
             is StringStatement -> statement.value
             is ConcatenatedStatement -> "${statement.first.synthesize(this)}${statement.second.synthesize(this)}"
+            is GreaterThanOrEqualStatement -> "${statement.left.synthesize(this)} >= ${statement.right.synthesize(this)}"
+            is LesserThanOrEqualStatement -> "${statement.left.synthesize(this)} <= ${statement.right.synthesize(this)}"
+            is EqualStatement -> "${statement.left.synthesize(this)} == ${statement.right.synthesize(this)}"
+            is NotEqualStatement -> "${statement.left.synthesize(this)} != ${statement.right.synthesize(this)}"
+            is AddStatement -> "${statement.left.synthesize(this)} + ${statement.right.synthesize(this)}"
+            is SubtractStatement -> "${statement.left.synthesize(this)} - ${statement.right.synthesize(this)}"
+            is MultiplyStatement -> "${statement.left.synthesize(this)} * ${statement.right.synthesize(this)}"
+            is DivideStatement -> "${statement.left.synthesize(this)} / ${statement.right.synthesize(this)}"
+            is ModuloStatement -> "${statement.left.synthesize(this)} % ${statement.right.synthesize(this)}"
+            is IntLiteralStatement -> statement.value.toString()
         }
 
     fun synthesize(scope: Scope): String =
