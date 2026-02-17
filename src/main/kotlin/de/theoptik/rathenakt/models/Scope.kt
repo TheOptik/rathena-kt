@@ -2,7 +2,9 @@ package de.theoptik.rathenakt.models
 
 import de.theoptik.rathenakt.Synthesizer
 
-sealed class Scope(open val name: String? = null) : Synthesizable {
+sealed class Scope(
+    open val name: String? = null,
+) : Synthesizable {
     val parts: MutableList<ScopePart> = mutableListOf()
 
     operator fun invoke(init: Scope.() -> Unit) {
@@ -17,19 +19,28 @@ sealed class Scope(open val name: String? = null) : Synthesizable {
         parts.add(ScopePartMessage(message))
     }
 
-    fun chatMessage(playerName: String, message: String) {
+    fun chatMessage(
+        playerName: String,
+        message: String,
+    ) {
         chatMessage(StringStatement(playerName), message)
     }
 
-    fun chatMessage(playerName: Statement, message: String) {
+    fun chatMessage(
+        playerName: Statement,
+        message: String,
+    ) {
         chatMessage(playerName, StringStatement(message))
     }
 
-    fun chatMessage(playerName: Statement, message: Statement) {
+    fun chatMessage(
+        playerName: Statement,
+        message: Statement,
+    ) {
         parts.add(ScopePartChatMessage(playerName, message))
     }
 
-    fun select(options:String) {
+    fun select(options: String) {
         parts.add(ScopePartSelect(options.split(":")))
     }
 
@@ -47,9 +58,7 @@ sealed class Scope(open val name: String? = null) : Synthesizable {
         parts.add(ScopePartEnd)
     }
 
-    override fun synthesize(synthesizer: Synthesizer): String {
-        return synthesizer.synthesize(this)
-    }
+    override fun synthesize(synthesizer: Synthesizer): String = synthesizer.synthesize(this)
 
     fun variable(
         name: String,
@@ -69,13 +78,15 @@ sealed class Scope(open val name: String? = null) : Synthesizable {
         return variable
     }
 
-    fun characterVariable(name: String, _typeHint: Int.Companion): Variable<Int> {
-        return CharacterIntVariable(name)
-    }
+    fun characterVariable(
+        name: String,
+        _typeHint: Int.Companion,
+    ): Variable<Int> = CharacterIntVariable(name)
 
-    fun characterVariable(name: String, _typeHint: String.Companion): Variable<String> {
-        return CharacterStringVariable(name)
-    }
+    fun characterVariable(
+        name: String,
+        _typeHint: String.Companion,
+    ): Variable<String> = CharacterStringVariable(name)
 
     fun characterVariable(
         name: String,
@@ -95,18 +106,26 @@ sealed class Scope(open val name: String? = null) : Synthesizable {
         return variable
     }
 
-    fun `if`(statement: Statement, init: IfCondition.() -> Unit) {
+    fun `if`(
+        statement: Statement,
+        init: IfCondition.() -> Unit,
+    ) {
         val ifScope = IfCondition(statement)
         ifScope.init()
         parts.add(ScopePartIf(ifScope))
     }
 
-    fun `if`(variable: Variable<*>, init: IfCondition.() -> Unit) {
+    fun `if`(
+        variable: Variable<*>,
+        init: IfCondition.() -> Unit,
+    ) {
         this.`if`(VariableStatement(variable), init)
     }
 }
 
-class SimpleScope(name: String?) : Scope(name)
+class SimpleScope(
+    name: String?,
+) : Scope(name)
 
 class Npc(
     name: String?,
@@ -132,14 +151,11 @@ class Npc(
         return scope
     }
 
-    override fun synthesize(synthesizer: Synthesizer):String {
-        return synthesizer.synthesize(this)
-    }
+    override fun synthesize(synthesizer: Synthesizer): String = synthesizer.synthesize(this)
 }
 
-class IfCondition(val statement: Statement) : Scope() {
-
-    override fun synthesize(synthesizer: Synthesizer): String {
-        return synthesizer.synthesize(this)
-    }
+class IfCondition(
+    val statement: Statement,
+) : Scope() {
+    override fun synthesize(synthesizer: Synthesizer): String = synthesizer.synthesize(this)
 }
