@@ -78,11 +78,11 @@ fun main() {
 //            specialeffect2 EF_BLESSING;
 //            sc_start SC_BLESSING,240000,10;
 //        }
-//            if (delay)
-//            healDelay = gettimetick(2) + delay;
-//            end;
+            `if`(delay) {
+//                healDelay = gettimetick(EPOCH_TIME) + delay;
+                end()
+            }
         }
-
     val synthesizer2 = Synthesizer()
     println(healer.synthesize(synthesizer2))
 }
