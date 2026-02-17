@@ -4,6 +4,72 @@ import de.theoptik.rathenakt.Synthesizer
 
 sealed class Statement : Synthesizable {
     override fun synthesize(synthesizer: Synthesizer): String = synthesizer.synthesize(this)
+
+    infix fun gt(other: Statement): Statement = GreaterThanStatement(this, other)
+
+    infix fun gt(other: Variable<*>): Statement = GreaterThanStatement(this, VariableStatement(other))
+
+    infix fun gt(other: Int): Statement = GreaterThanStatement(this, IntLiteralStatement(other))
+
+    infix fun lt(other: Variable<*>): Statement = LesserThanStatement(this, VariableStatement(other))
+
+    infix fun lt(other: Statement): Statement = LesserThanStatement(this, other)
+
+    infix fun lt(other: Int): Statement = LesserThanStatement(this, IntLiteralStatement(other))
+
+    infix fun gte(other: Statement): Statement = GreaterThanOrEqualStatement(this, other)
+
+    infix fun gte(other: Variable<*>): Statement = GreaterThanOrEqualStatement(this, VariableStatement(other))
+
+    infix fun gte(other: Int): Statement = GreaterThanOrEqualStatement(this, IntLiteralStatement(other))
+
+    infix fun lte(other: Statement): Statement = LesserThanOrEqualStatement(this, other)
+
+    infix fun lte(other: Variable<*>): Statement = LesserThanOrEqualStatement(this, VariableStatement(other))
+
+    infix fun lte(other: Int): Statement = LesserThanOrEqualStatement(this, IntLiteralStatement(other))
+
+    infix fun eq(other: Statement): Statement = EqualStatement(this, other)
+
+    infix fun eq(other: Variable<*>): Statement = EqualStatement(this, VariableStatement(other))
+
+    infix fun eq(other: Int): Statement = EqualStatement(this, IntLiteralStatement(other))
+
+    infix fun neq(other: Statement): Statement = NotEqualStatement(this, other)
+
+    infix fun neq(other: Variable<*>): Statement = NotEqualStatement(this, VariableStatement(other))
+
+    infix fun neq(other: Int): Statement = NotEqualStatement(this, IntLiteralStatement(other))
+
+    operator fun plus(other: Statement): Statement = AddStatement(this, other)
+
+    operator fun plus(other: Variable<*>): Statement = AddStatement(this, VariableStatement(other))
+
+    operator fun plus(other: Int): Statement = AddStatement(this, IntLiteralStatement(other))
+
+    operator fun minus(other: Statement): Statement = SubtractStatement(this, other)
+
+    operator fun minus(other: Variable<*>): Statement = SubtractStatement(this, VariableStatement(other))
+
+    operator fun minus(other: Int): Statement = SubtractStatement(this, IntLiteralStatement(other))
+
+    operator fun times(other: Statement): Statement = MultiplyStatement(this, other)
+
+    operator fun times(other: Variable<*>): Statement = MultiplyStatement(this, VariableStatement(other))
+
+    operator fun times(other: Int): Statement = MultiplyStatement(this, IntLiteralStatement(other))
+
+    operator fun div(other: Statement): Statement = DivideStatement(this, other)
+
+    operator fun div(other: Variable<*>): Statement = DivideStatement(this, VariableStatement(other))
+
+    operator fun div(other: Int): Statement = DivideStatement(this, IntLiteralStatement(other))
+
+    operator fun rem(other: Statement): Statement = ModuloStatement(this, other)
+
+    operator fun rem(other: Variable<*>): Statement = ModuloStatement(this, VariableStatement(other))
+
+    operator fun rem(other: Int): Statement = ModuloStatement(this, IntLiteralStatement(other))
 }
 
 data class ConcatenatedStatement(

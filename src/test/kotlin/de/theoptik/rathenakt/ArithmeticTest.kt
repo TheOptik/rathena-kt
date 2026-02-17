@@ -2,7 +2,6 @@ package de.theoptik.rathenakt
 
 import de.theoptik.rathenakt.models.Zeny
 import de.theoptik.rathenakt.models.npc
-import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Test
 import kotlin.test.assertContains
 
