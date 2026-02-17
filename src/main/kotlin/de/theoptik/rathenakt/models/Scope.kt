@@ -157,6 +157,13 @@ sealed class Scope(
         parts.add(ScopePartCompoundAssignment(variable, "+=", IntLiteralStatement(value)))
     }
 
+    fun plusAssign(
+        variable: Variable<*>,
+        value: Variable<*>,
+    ) {
+        parts.add(ScopePartCompoundAssignment(variable, "+=", VariableStatement(value)))
+    }
+
     fun minusAssign(
         variable: Variable<*>,
         value: Statement,
