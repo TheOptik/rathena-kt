@@ -8,7 +8,7 @@ sealed class Statement: Synthesizable{
     }
 }
 
-data class ConcatinazedStatement(val first:Statement, val second:Statement):Statement()
+data class ConcatenatedStatement(val first:Statement, val second:Statement):Statement()
 data class StringStatement(val value: String):Statement()
 data class VariableStatement(val variable: Variable<*>): Statement()
 data class GreaterThanStatement(val left: Statement, val right: Statement): Statement()

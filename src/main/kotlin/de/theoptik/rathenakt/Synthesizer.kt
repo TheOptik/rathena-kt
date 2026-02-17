@@ -34,7 +34,7 @@ class Synthesizer {
             is TimeTickStatement -> "gettimetick(${statement.type.value})"
             is VariableStatement -> statement.variable.synthesize(this)
             is StringStatement -> statement.value
-            is ConcatinazedStatement -> "${statement.first.synthesize(this)}${statement.second.synthesize(this)}"
+            is ConcatenatedStatement -> "${statement.first.synthesize(this)}${statement.second.synthesize(this)}"
         }
     }
 
