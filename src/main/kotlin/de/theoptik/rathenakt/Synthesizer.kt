@@ -31,6 +31,7 @@ class Synthesizer {
             is CallFuncStatement -> "callfunc(\"${statement.functionName}\", ${statement.argument.synthesize(this)})"
             is CharInfoStatement -> "strcharinfo(${statement.type.value})"
             is GreaterThanStatement -> "${statement.left.synthesize(this)} > ${statement.right.synthesize(this)}"
+            is LesserThanStatement -> "${statement.left.synthesize(this)} < ${statement.right.synthesize(this)}"
             is TimeTickStatement -> "gettimetick(${statement.type.value})"
             is VariableStatement -> statement.variable.synthesize(this)
             is StringStatement -> statement.value
