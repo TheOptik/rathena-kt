@@ -17,9 +17,9 @@ data object Zeny: PermanentCharacterIntVariable("Zeny")
 
 
 infix fun String.concat(statement: Statement): Statement {
-    return ConcatinazedStatement(StringStatement(this), statement)
+    return ConcatenatedStatement(StringStatement(this), statement)
 }
 
 infix fun Statement.concat(string: String): Statement {
-    return ConcatinazedStatement(this,StringStatement(string))
+    return ConcatenatedStatement(this,StringStatement(string))
 }

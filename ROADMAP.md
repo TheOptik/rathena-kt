@@ -4,7 +4,7 @@
 - [ ] `Variable.kt`: `lt` generates `GreaterThanStatement` instead of `LessThanStatement` — need new statement class
 - [ ] `Variable.kt`: `PermanentCharacterStringVariable` extends `Variable<Int>` — should be `Variable<String>`
 - [ ] `Synthesizer.kt`: `close` auto-insertion logic may be inverted — adds close after terminating parts instead of non-terminating
-- [ ] `Statement.kt`: Typo `ConcatinazedStatement` → `ConcatenatedStatement`
+- [x] `Statement.kt`: Typo `ConcatinazedStatement` → `ConcatenatedStatement`
 
 ## 🔧 Core Missing Features (Priority)
 - [ ] Arithmetic operators (`+`, `-`, `*`, `/`, `%`, `+=`, `-=`)
