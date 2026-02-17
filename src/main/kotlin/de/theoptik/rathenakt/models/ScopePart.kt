@@ -24,7 +24,11 @@ data class ScopePartGoto(val scope: Scope) : ScopePart() {
 
 data class ScopePartMenu(val options: Map<String, Scope?>) : ScopePart()
 
-data object ScopePartEnd : ScopePart()
+data object ScopePartEnd : ScopePart() {
+    override fun isTerminating(): Boolean {
+        return true
+    }
+}
 
 data object ScopePartClear : ScopePart()
 
